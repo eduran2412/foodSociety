@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "273650443807",
+    "firebase_url": "https://foodsocietydata.firebaseio.com",
+    "project_id": "foodsocietydata",
+    "storage_bucket": "foodsocietydata.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:273650443807:android:6cc4d0b7d171e04282572a",
+        "android_client_info": {
+          "package_name": "com.erenduran.foodsociety"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "273650443807-ed3sgqg1q54fdsu3eshgqrpnofdi40e6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcJeZo7UxUDH2bYcue4u-QisJn12yb0C8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "273650443807-ed3sgqg1q54fdsu3eshgqrpnofdi40e6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
