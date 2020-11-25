@@ -43,7 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    public void sıgnInClicked(View view) {
+    public void signInClicked(View view) {
 
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
