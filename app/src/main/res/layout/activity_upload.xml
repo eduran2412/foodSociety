@@ -6,4 +6,42 @@
     android:layout_height="match_parent"
     tools:context=".UploadActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="42dp"
+        android:layout_marginBottom="23dp"
+        android:onClick="selectImage"
+        app:layout_constraintBottom_toTopOf="@+id/commentText"
+        app:layout_constraintEnd_toEndOf="@+id/commentText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/group" />
+
+    <EditText
+        android:id="@+id/commentText"
+        android:layout_width="333dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginEnd="42dp"
+        android:layout_marginBottom="30dp"
+        android:ems="10"
+        android:hint="enter comment"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="167dp"
+        android:onClick="upload"
+        android:text="upload"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commentText" />
 </androidx.constraintlayout.widget.ConstraintLayout>
