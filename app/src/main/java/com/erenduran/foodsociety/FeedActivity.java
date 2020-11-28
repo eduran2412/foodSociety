@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class FeedActivity extends AppCompatActivity {
 
-    FirebaseAuth firebaseAuth;
+     private FirebaseAuth firebaseAuth;
 
 
     @Override
