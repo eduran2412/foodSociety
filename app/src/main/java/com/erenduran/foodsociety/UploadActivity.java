@@ -28,6 +28,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class UploadActivity extends AppCompatActivity {
     //Bitmap burada oluşturduk ki her yerde kullanabilelim
@@ -75,22 +76,46 @@ public class UploadActivity extends AppCompatActivity {
 
         //imageData boş değilse kullanıcı gerçekten bir şey seçtiyse diye if bloğu kullandık
         //ilk images klasör adı , images2 onun içindeki klasör , images2.jpg ise resmin kaydedilirken kullanılan adı
-        if(imageData != null){
-            storageReference.child("images").child("images2").child("images2.jpg").putFile(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        if (imageData != null) {
+
+            //universal unique id
+            //UUID, rastgele bir id çıkar manasına gelir
+            UUID uuid = UUID.randomUUID();
+
+            //images klasörüne uuid'yi koy, sonuna da jpg ekle
+            String imageName = "images/" + uuid + ".jpg";
+
+
+            //image klasörünün içinde uydurma(random) bir id ve sonunda ise jpg uzantısının olduğu anlamına gelir.
+            storageReference.child(imageName).putFile(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    //Download URL
+                    //Download URL'yi almak için bir tane daha referans almak gerekiyor
+                    //Upload edilen image'ın nereye kaydedildiğini depo içerisinde bul demek
+                    StorageReference newReference = FirebaseStorage.getInstance().getReference(imageName);
+
+                    newReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            //Url oluşturma
+                            String downloadUrl = uri.toString();
+
+
+                        }
+                    });
 
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(UploadActivity.this,e.getLocalizedMessage().toString(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(UploadActivity.this, e.getLocalizedMessage().toString(), Toast.LENGTH_LONG).show();
 
                 }
             });
 
         }
-
 
 
     }
@@ -164,7 +189,6 @@ public class UploadActivity extends AppCompatActivity {
             imageData = data.getData(); //sadece bu verildi henüz Bitmap fln verilmedi (bir görsele çevirilmedi) , onu da aşağıda çeviriyoruz
             /* Uri imageData = data.getData(); diye tanımlamıştık globalde imageData yı tanımladığımız için
             Uri yi burada sildik  ve imageData = data.getData(); oldu */
-
 
 
             // globalde Bitmap tanımladık adına selectedImage dedik
