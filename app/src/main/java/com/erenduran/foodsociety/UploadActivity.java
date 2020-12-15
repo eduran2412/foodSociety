@@ -19,6 +19,13 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 
@@ -28,6 +35,16 @@ public class UploadActivity extends AppCompatActivity {
     // imageView tanımlıyoruz ki seçilen görsel ile imageView i onActivityResult ta değiştirebilelim
     ImageView imageView;
     EditText commentText;
+
+    // firebase storage tanımlanması, daha sonra da onCreate altına initialize edilir
+    private FirebaseStorage firebaseStorage;
+
+    // uri tanımlanır imageData diye
+    Uri imageData;
+
+    //storage da neyi nereye kaydedeceğimizi belirtmek için referans kullanılır bu yüzden referans tanımlanır
+    // StorageReference sınıfında storageReference oluşturulur , daha sonra da onCreate altına initialize edilir
+    private StorageReference storageReference;
 
 
     @Override
@@ -40,10 +57,41 @@ public class UploadActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         commentText = findViewById(R.id.commentText);
 
+        //  globalde tanımlanan firebase storage a initialize edildi
+        firebaseStorage = FirebaseStorage.getInstance();
+
+        storageReference = firebaseStorage.getReference();
+
 
     }
 
     public void upload(View view) {
+        // yukarıda initialization yapıldı burada da tıklandıktan sonra ne yapılacağı yapılır
+        //storage reference ile bir görsel kaydedilebilir ve nereye kaydedildiği söylenebilir
+        //storageReference.child() ile hangi klasör içine girileceği söylenir
+
+        //.putFile ın içine koyacağımız uri aşağıda onActivityResult ta oluşturulmuştu
+        // globalde imageData tanımlanır uri ile ve onActivityResult ta ki uri silinir ,zaten globale tanımladık her yerde kullanabilmek için
+
+        //imageData boş değilse kullanıcı gerçekten bir şey seçtiyse diye if bloğu kullandık
+        //ilk images klasör adı , images2 onun içindeki klasör , images2.jpg ise resmin kaydedilirken kullanılan adı
+        if(imageData != null){
+            storageReference.child("images").child("images2").child("images2.jpg").putFile(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(UploadActivity.this,e.getLocalizedMessage().toString(),Toast.LENGTH_LONG).show();
+
+                }
+            });
+
+        }
+
+
 
     }
 
@@ -113,7 +161,11 @@ public class UploadActivity extends AppCompatActivity {
 
             // verilen data bir uri a çevrilir (uri , url gibi bir şeydir, görselin nerede kayıtlı olduğunun adresi)
 
-            Uri imageData = data.getData(); //sadece bu verildi henüz Bitmap fln verilmedi (bir görsele çevirilmedi) , onu da aşağıda çeviriyoruz
+            imageData = data.getData(); //sadece bu verildi henüz Bitmap fln verilmedi (bir görsele çevirilmedi) , onu da aşağıda çeviriyoruz
+            /* Uri imageData = data.getData(); diye tanımlamıştık globalde imageData yı tanımladığımız için
+            Uri yi burada sildik  ve imageData = data.getData(); oldu */
+
+
 
             // globalde Bitmap tanımladık adına selectedImage dedik
 
