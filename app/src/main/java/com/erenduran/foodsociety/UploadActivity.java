@@ -53,8 +53,8 @@ public class UploadActivity extends AppCompatActivity {
     // StorageReference sınıfında storageReference oluşturulur , daha sonra da onCreate altına initialize edilir
     private StorageReference storageReference;
 
-    private FirebaseFirestore firebaseFirestore;
-    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firebaseFirestore; //(1) veri tabanı ile çalışmak için değişken oluşturulur
+    private FirebaseAuth firebaseAuth;//(3)Email lazım onun için güncel kullanıcı lazım güncel kullanıcıyı almak için FirebaseAuth kullanmamız lazım
 
 
     @Override
@@ -72,8 +72,8 @@ public class UploadActivity extends AppCompatActivity {
 
         storageReference = firebaseStorage.getReference();
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance(); //(2) FirebaseFirestore sınıfından oluşturulmuş bir instance (obje) elde edilir
+        firebaseAuth = FirebaseAuth.getInstance(); //(4)
 
 
     }
@@ -112,25 +112,30 @@ public class UploadActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             //Url oluşturma
-                            String downloadUrl = uri.toString();
+                            String downloadUrl = uri.toString(); // download url alındı
 
-                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                            String userEmail = firebaseUser.getEmail();
+                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser(); //(5) FirebaseUser alınır
+                            String userEmail = firebaseUser.getEmail();  // (6) diyerek e mail alınır
 
-                            String comment = commentText.getText().toString();
+                            String comment = commentText.getText().toString(); //(7) comment alma sırada bunları database e kaydetme var..
 
-                            HashMap<String, Object> postData = new HashMap<>();
+                            HashMap<String, Object> postData = new HashMap<>();//(9) key string olur ancak value her şey olabilir bu yüzden object seçilir
                             postData.put("useremail", userEmail);
                             postData.put("downloadurl",downloadUrl);
                             postData.put("comment", comment);
-                            postData.put("date", FieldValue.serverTimestamp());
+                            postData.put("date", FieldValue.serverTimestamp());//(10) serverdeki güncel zamanı almak için FieldValue... kullanılır
+
+                            /* (8) database e kaydederken firebaseFirestore çağırılır nereye kaydedileceği ayarlanır collection ile
+                             (Posts) kaydedilecek klasör adı, .add derken bizden hashMap istiyor onu yukarıda  postData adında oluşturup
+                              .add içine yazıldı */
+                            //(11) .add içine veri olarak , oluşturulan postData verilir sonrasında succes listenerler yapılır
                             firebaseFirestore.collection("Posts").add(postData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
                                 public void onSuccess(DocumentReference documentReference) {
 
-                                    Intent intent = new Intent(UploadActivity.this,FeedActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
+                                    Intent intent = new Intent(UploadActivity.this,FeedActivity.class); //(12)succes durumunda kullanıcı feed activity e götürülür
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//(13) daha önceden açık olan bütün aktiviteler kapatılır
+                                    startActivity(intent);//(14)feed activity başlatılır
 
 
 
