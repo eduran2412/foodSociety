@@ -17,6 +17,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.sql.SQLOutput;
@@ -76,7 +77,8 @@ public class FeedActivity extends AppCompatActivity {
         CollectionReference collectionReference = firebaseFirestore.collection("Posts");
 
         //(7)bütün veriler queryDocumentSnapshot içinde yüklü aynı zamanda veri tabanı değişse bile veriler de güncellenir..
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        //date'e göre dizme işlemi orderBy tarafından yapılır. DESCENDING azalarak çekmeyi sağlar.
+        collectionReference.orderBy("date", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 //(8) eğer data okunamaz ise ..
