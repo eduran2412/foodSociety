@@ -3,6 +3,8 @@ package com.erenduran.foodsociety;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,9 +31,13 @@ public class FeedActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore; //(1)
+
+    //(15.)reycler için stringler tanımlandı
     ArrayList<String> userEmailFromFB;
     ArrayList<String> userCommentFromFB;
     ArrayList<String> userImageFromFB;
+
+    FeedRecyclerAdapter feedRecyclerAdapter;
 
 
 
@@ -71,7 +77,7 @@ public class FeedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 
-        //initialize edildi.
+        //(16.)globalde tanımlanan stringler initialize edildi.
         userCommentFromFB = new ArrayList<>();
         userEmailFromFB = new ArrayList<>();
         userImageFromFB = new ArrayList<>();
@@ -80,6 +86,19 @@ public class FeedActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance(); //(2) firebaseFirestore initialize edilir getInstance ile birlikte
         getDataFromFirestore();//(4) aşağıda oluşturulan methodu onCreate altında çağırırız..
+
+        //(3!) oluşturulan feedRecyclerAdapter sayesinde buradaki data FeedActivity de kullanılabilecek
+
+        // RecyclerView tanımlanacak
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+
+        // RecyclerViev in kendi layout manager i oluyo,anasayfa da RecyclerView i aşağı doğru vertical ineceği belirtilecek,
+        // row ların nasıl sıralanacağı belirtilecek
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+       feedRecyclerAdapter = new FeedRecyclerAdapter(userEmailFromFB,userCommentFromFB,userImageFromFB);
+       // birbirlerine bağnama işlemi yapılır
+        recyclerView.setAdapter(feedRecyclerAdapter);
 
     }
 
@@ -91,7 +110,8 @@ public class FeedActivity extends AppCompatActivity {
         CollectionReference collectionReference = firebaseFirestore.collection("Posts");
 
         //(7)bütün veriler queryDocumentSnapshot içinde yüklü aynı zamanda veri tabanı değişse bile veriler de güncellenir..
-        //date'e göre dizme işlemi orderBy tarafından yapılır. DESCENDING azalarak çekmeyi sağlar.
+        //(14.)date'e göre dizme işlemi orderBy tarafından yapılır. DESCENDING azalarak çekmeyi sağlar.
+        // (ASCENDING olsaydı artarak olurdu,date azalarak..[direction bu])
         collectionReference.orderBy("date", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -99,7 +119,7 @@ public class FeedActivity extends AppCompatActivity {
                 if (e != null) { //(9) eğer e boş ise..
                     Toast.makeText(FeedActivity.this, e.getLocalizedMessage().toString(), Toast.LENGTH_LONG).show();
                 } //(9)bu dizinin içinde dökümanlar var collection içinde..bu dökümanlara ulaşmaya çalışıyoruz,
-                //(9.1) aşağıdaki diziyi tek tek ele almak gerekiyo bu yüzden for loop yapılır..
+                // aşağıdaki diziyi tek tek ele almak gerekiyo bu yüzden for loop yapılır..
                 if (queryDocumentSnapshots != null) {
 
                     //(10)DocumentSnapshot dedik çünkü bize tek DocumentSnapshot olarak gelecek , snapshot dedikten sonra
@@ -117,10 +137,13 @@ public class FeedActivity extends AppCompatActivity {
                         String downloadUrl = (String) data.get("downloadurl");
 
 
-                        //hepsi buraya kaydedildi.
+                        //(17.) tanımlanan stringlerin hepsi buraya kaydedildi.[bunlar recycle view de gösterilecek]
                         userCommentFromFB.add(comment);
                         userEmailFromFB.add(userEmail);
                         userImageFromFB.add(downloadUrl);
+
+                        // içeri veri gelince adapter e uyarı yapılır
+                        feedRecyclerAdapter.notifyDataSetChanged();
 
 
 
