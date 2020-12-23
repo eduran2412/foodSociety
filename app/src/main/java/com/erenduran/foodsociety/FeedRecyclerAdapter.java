@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapter.PostHolder> {
@@ -30,7 +32,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
     @NonNull
     @Override
     public PostHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {//viewHolder oluşturulunca ne yapacağı
-           //recycler row ile bağlama işlemi yapılır.inflater ile
+        //recycler row ile bağlama işlemi yapılır.inflater ile
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.recycler_row, parent, false);
         return new PostHolder(view);
@@ -39,9 +41,10 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
     @Override
     public void onBindViewHolder(@NonNull PostHolder holder, int position) {//viewHolder e bağlanınca ne yapılacağı
         holder.userEmailText.setText(userEmailList.get(position)); // holder yanındakilere referans ediyo,
-                                                    //(5!)parantez içine kaçıncı pozisyondaysak onu getir diyoruz mesela ana sayfada
-                                                   // recyclerView in ilk row unda isek 0 verir,rowdaki index 0 ise arraylist teki de 0 olur
+        //(5!)parantez içine kaçıncı pozisyondaysak onu getir diyoruz mesela ana sayfada
+        // recyclerView in ilk row unda isek 0 verir,rowdaki index 0 ise arraylist teki de 0 olur
         holder.commentText.setText(userCommentList.get(position));//(6!)yukarıdakinin aynısı
+        Picasso.get().load(userImageList.get(position)).into(holder.imageView);
 
 
     }
@@ -51,7 +54,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
     public int getItemCount() {
 
         return userEmailList.size(); //(4!) return 0 değil artık,bütün user.. ların size ı aynı birini kullanmak yeterli
-                                    // [yukarıda private tanımlanan arraylistler]
+        // [yukarıda private tanımlanan arraylistler]
     }
 
     //recycler_row.xml içerisinde oluşturulan görünümler burada tanımlanır.
@@ -63,7 +66,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
 
 
         public PostHolder(@NonNull View itemView) { // parantez içine itemView verdiği  için
-                                                   // aşağıda itemView kullanarak üst satırdakiler tanımlanır
+            // aşağıda itemView kullanarak üst satırdakiler tanımlanır
             super(itemView);
 
             imageView = itemView.findViewById(R.id.recyclerview_row_imageview);

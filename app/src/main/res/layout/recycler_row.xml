@@ -7,31 +7,42 @@
 
     <TextView
         android:id="@+id/recyclerview_row_useremail_text"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
         android:paddingLeft="7dp"
         android:paddingTop="7dp"
         android:paddingBottom="7dp"
         android:text="useremail text"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="7dp" />
+        app:layout_constraintBottom_toTopOf="@+id/recyclerview_row_imageview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/recyclerview_row_imageview"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        app:srcCompat="@drawable/ic_launcher_background"
-        tools:layout_editor_absoluteX="80dp"
-        tools:layout_editor_absoluteY="40dp" />
+        android:layout_marginBottom="33dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerview_row_useremail_text"
+        app:srcCompat="@drawable/ic_launcher_background" />
 
     <TextView
         android:id="@+id/recyclerview_row_comment_text"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingLeft="7dp"
         android:paddingTop="7dp"
         android:paddingBottom="7dp"
         android:text="comment text"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="290dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerview_row_imageview"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
